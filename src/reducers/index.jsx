@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import recipesList from "./recipesList";
+// import recipesList from "./recipesList";
 
 export default combineReducers({
-  recipesList
+  // recipesList
 });

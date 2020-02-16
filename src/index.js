@@ -1,30 +1,33 @@
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
+import "react-app-polyfill/ie11";
+import "react-app-polyfill/stable";
 import React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import ReactDOM from "react-dom";
 import "./sass/index.scss";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import rootReducer from "./reducers";
 import { loadState, saveState } from "./utils/localStorage";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import ItemsList from "./containers/ItemsList";
+import ItemDetails from "./containers/ItemDetails";
 
 const persistedState = loadState();
 const store = createStore(rootReducer, persistedState);
-store.subscribe(
-
-  () => {
-    saveState({
-      recipesList: store.getState().recipesList
-    });
-  }
-
-);
+store.subscribe(() => {
+  saveState({
+    recipesList: store.getState().recipesList
+  });
+});
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router>
+      <Switch>
+        <Route exact path="/" component={ItemsList} />
+        <Route path="/offer" component={ItemDetails} />
+      </Switch>
+    </Router>
   </Provider>,
   document.getElementById("root")
 );
