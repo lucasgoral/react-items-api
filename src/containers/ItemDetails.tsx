@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function ItemDetails() {
+export default function ItemDetails(props: any) {
 	interface Item {
 		id: number;
 		title: string;
@@ -14,9 +14,9 @@ export default function ItemDetails() {
 	}
 	const initialState: Item[] = [];
 
-	const [ state, setstate ] = useState(initialState);
+	const [ state, setState ] = useState(initialState);
 	useEffect(() => {
-		fetch('http://127.0.0.1:4010/offers/111', {
+		fetch(`http://127.0.0.1:4010/offers/${props.match.params.id}`, {
 			headers: new Headers({
 				Authorization: 'Bearer loremipsum'
 			})
@@ -27,13 +27,14 @@ export default function ItemDetails() {
 			.then((json) => {
 				console.log(json);
 
-				setstate([ json ]);
+				setState([ json ]);
 			});
 		return () => {};
 	}, []);
 
 	return (
 		<div>
+			{console.log(props)}
 			<ul>
 				{state.map((item) => {
 					return (
@@ -41,6 +42,10 @@ export default function ItemDetails() {
 							<button type="button">Back to the list</button>
 							<p>
 								<b>Title:</b> {item.title}
+							</p>
+							<p>
+								<b>Id: </b>
+								{props.match.params.id}
 							</p>
 							<p>
 								<b>Desription:</b> {item.description}
