@@ -13,30 +13,10 @@ interface Item {
 }
 
 console.log("test");
-const itemsList: Item[] = [
-  // {
-  //   id: 1,
-  //   title: "title 1",
-  //   description: "lorem",
-  //   img_url: "gfhfgh",
-  //   price: 12,
-  //   status: "published",
-  //   created_at: "3123",
-  //   discount: 123,
-  //   rating: 34
-  // },
-  // {
-  //   id: 2,
-  //   title: "title 2",
-  //   description: "lorem",
-  //   img_url: "gfhfgh",
-  //   price: 12,
-  //   status: "published",
-  //   created_at: "3123",
-  //   discount: 123,
-  //   rating: 34
-  // }
-];
+const itemsList = {
+  offset: 0,
+  items: []
+};
 
 const reducer = (
   state = itemsList,
@@ -44,7 +24,11 @@ const reducer = (
 ) => {
   switch (action.type) {
     case ADD_ITEMS:
-      return [...state, ...action.items];
+      return {
+        ...state,
+        items: [...state.items, ...action.items],
+        offset: state.offset + 1
+      };
 
     default:
       return state;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { ADD_ITEMS } from "../actions/Actions";
 import { Link } from "react-router-dom";
@@ -35,12 +35,9 @@ const mapStateToProps = (state: { itemsList: any }) => {
 const initialState: Item[] = [];
 
 function ItemsList({ itemsList, addItem }: any) {
-  const [offset, setOffset] = useState(0);
+  const itemsListRef = useRef<HTMLDivElement>(null);
   const loadMore = () => {
-    setOffset(offset + 1);
-  };
-  useEffect(() => {
-    fetch(`http://127.0.0.1:4010/offers?limit=10&offset=${offset}`, {
+    fetch(`http://127.0.0.1:4010/offers?limit=10&offset=${itemsList.offset}`, {
       headers: new Headers({
         Authorization: "Bearer loremipsum"
       })
@@ -50,30 +47,45 @@ function ItemsList({ itemsList, addItem }: any) {
       })
       .then(json => {
         console.log(json);
-
-        addItem(json);
+        if (itemsListRef.current) {
+          console.log(window.innerHeight);
+          console.log(itemsListRef.current.clientHeight);
+          if (itemsListRef.current.clientHeight < window.innerHeight) {
+            addItem(json);
+          }
+        }
+      })
+      .then(() => {
+        if (itemsListRef.current) {
+          console.log(window.innerHeight);
+          console.log(itemsListRef.current.clientHeight);
+          if (itemsListRef.current.clientHeight < window.innerHeight) {
+            loadMore();
+          }
+        }
       });
-    return () => {};
-  }, [offset]);
+  };
 
   return (
     <div>
-      <ul>
-        {itemsList.map(
-          (item: {
-            id: string | number | undefined;
-            title: React.ReactNode;
-          }) => {
-            return (
-              <li key={item.id}>
-                <Link to={`/offer/${item.id}`}>
-                  <b>Title:</b> {item.title}
-                </Link>
-              </li>
-            );
-          }
-        )}
-      </ul>
+      <div ref={itemsListRef}>
+        <ul>
+          {itemsList.items.map(
+            (item: {
+              id: string | number | undefined;
+              title: React.ReactNode;
+            }) => {
+              return (
+                <li key={item.id}>
+                  <Link to={`/offer/${item.id}`}>
+                    <b>Title:</b> {item.title}
+                  </Link>
+                </li>
+              );
+            }
+          )}
+        </ul>
+      </div>
       {<button onClick={loadMore}>Load more</button>}
 
       {console.log(itemsList)}
