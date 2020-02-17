@@ -65,7 +65,9 @@ function ItemsList({ itemsList, addItem }: any) {
           }) => {
             return (
               <li key={item.id}>
-                <b>Title:</b> {item.title}
+                <a href={`/offer/${item.id}`}>
+                  <b>Title:</b> {item.title}
+                </a>
               </li>
             );
           }
