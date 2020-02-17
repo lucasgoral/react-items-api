@@ -32,10 +32,9 @@ const mapStateToProps = (state: { itemsList: any }) => {
   return { itemsList };
 };
 
-const initialState: Item[] = [];
-
 function ItemsList({ itemsList, addItem }: any) {
   const itemsListRef = useRef<HTMLDivElement>(null);
+
   const loadMore = () => {
     fetch(`http://127.0.0.1:4010/offers?limit=10&offset=${itemsList.offset}`, {
       headers: new Headers({
@@ -46,26 +45,38 @@ function ItemsList({ itemsList, addItem }: any) {
         return response.status === 200 ? response.json() : [];
       })
       .then(json => {
-        console.log(json);
-        if (itemsListRef.current) {
-          console.log(window.innerHeight);
-          console.log(itemsListRef.current.clientHeight);
-          if (itemsListRef.current.clientHeight < window.innerHeight) {
-            addItem(json);
-          }
-        }
+        addItem(json);
       })
       .then(() => {
-        if (itemsListRef.current) {
-          console.log(window.innerHeight);
-          console.log(itemsListRef.current.clientHeight);
-          if (itemsListRef.current.clientHeight < window.innerHeight) {
-            loadMore();
-          }
-        }
+        shouldLoadMore();
       });
   };
+  const shouldLoadMore = () => {
+    console.log("shouldLoadMore");
+    console.log(window.screenY);
+    console.log("shouldLoadMore");
+    if (itemsListRef.current) {
+      console.log(window.innerHeight);
+      console.log(itemsListRef.current.clientHeight);
+      if (
+        itemsListRef.current.clientHeight <=
+        window.innerHeight + window.screenY
+      ) {
+        loadMore();
+      }
+    }
+  };
 
+  useEffect(() => {
+    // shouldLoadMore();
+    window.addEventListener("scroll", () => {
+      console.log();
+      shouldLoadMore();
+    });
+
+    // clean up
+    return () => window.removeEventListener("scroll", shouldLoadMore);
+  }, []);
   return (
     <div>
       <div ref={itemsListRef}>
