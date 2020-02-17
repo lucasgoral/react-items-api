@@ -14,28 +14,28 @@ interface Item {
 
 console.log("test");
 const itemsList: Item[] = [
-  {
-    id: 1,
-    title: "title 1",
-    description: "lorem",
-    img_url: "gfhfgh",
-    price: 12,
-    status: "published",
-    created_at: "3123",
-    discount: 123,
-    rating: 34
-  },
-  {
-    id: 2,
-    title: "title 2",
-    description: "lorem",
-    img_url: "gfhfgh",
-    price: 12,
-    status: "published",
-    created_at: "3123",
-    discount: 123,
-    rating: 34
-  }
+  // {
+  //   id: 1,
+  //   title: "title 1",
+  //   description: "lorem",
+  //   img_url: "gfhfgh",
+  //   price: 12,
+  //   status: "published",
+  //   created_at: "3123",
+  //   discount: 123,
+  //   rating: 34
+  // },
+  // {
+  //   id: 2,
+  //   title: "title 2",
+  //   description: "lorem",
+  //   img_url: "gfhfgh",
+  //   price: 12,
+  //   status: "published",
+  //   created_at: "3123",
+  //   discount: 123,
+  //   rating: 34
+  // }
 ];
 
 const reducer = (

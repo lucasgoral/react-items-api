@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { ADD_ITEMS } from "../actions/Actions";
+import { Link } from "react-router-dom";
 
 interface Item {
   id: number;
@@ -65,9 +66,9 @@ function ItemsList({ itemsList, addItem }: any) {
           }) => {
             return (
               <li key={item.id}>
-                <a href={`/offer/${item.id}`}>
+                <Link to={`/offer/${item.id}`}>
                   <b>Title:</b> {item.title}
-                </a>
+                </Link>
               </li>
             );
           }
