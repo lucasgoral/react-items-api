@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SingleItem } from '../types/interfaces';
@@ -21,6 +21,7 @@ const mapStateToProps = (state: { itemsList: any }) => {
 
 function ItemsList({ itemsList, addItem }: any) {
 	const itemsListRef = useRef<HTMLDivElement>(null);
+	const [ errorState, setErrorState ] = useState(false);
 
 	const loadMore = () => {
 		fetch(`http://127.0.0.1:4010/offers?limit=10&offset=${itemsList.offset}`, {
@@ -39,12 +40,15 @@ function ItemsList({ itemsList, addItem }: any) {
 				setTimeout(() => {
 					shouldLoadMore();
 				}, 50);
+				setErrorState(false);
+			})
+			.catch((e) => {
+				console.log(e);
+				setErrorState(true);
 			});
 	};
 	const shouldLoadMore = () => {
 		if (itemsListRef.current) {
-			console.log(window.pageYOffset);
-			console.log(itemsListRef.current.clientHeight);
 			if (itemsListRef.current.clientHeight <= window.innerHeight + window.pageYOffset) {
 				loadMore();
 			}
@@ -55,7 +59,6 @@ function ItemsList({ itemsList, addItem }: any) {
 		window.addEventListener('scroll', () => {
 			shouldLoadMore();
 		});
-		console.log(itemsList.items);
 		if (itemsList.items.length === 0) {
 			shouldLoadMore();
 		}
@@ -70,11 +73,12 @@ function ItemsList({ itemsList, addItem }: any) {
 					{itemsList.items.map((item: SingleItem) => {
 						return (
 							<li key={item.id}>
-								<Link to={`/offer/${item.id}`}>
-									<p>
+								<p>
+									<Link to={`/offer/${item.id}`}>
 										<b>Title: </b> {item.title}
-									</p>
-								</Link>
+									</Link>
+								</p>
+
 								<p>
 									<b>Status: </b>
 									{item.status}
@@ -87,6 +91,11 @@ function ItemsList({ itemsList, addItem }: any) {
 						);
 					})}
 				</ul>
+				{errorState ? (
+					<button className="bt bt-danger" onClick={shouldLoadMore}>
+						Cannot load data. Click to try again.
+					</button>
+				) : null}
 			</div>
 		</div>
 	);
