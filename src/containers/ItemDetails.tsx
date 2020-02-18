@@ -30,7 +30,7 @@ export default function ItemDetails({ history, match }: any) {
         setState([json]);
       });
     return () => {};
-  }, []);
+  } );
 
   return (
     <div>
@@ -38,7 +38,7 @@ export default function ItemDetails({ history, match }: any) {
         {state.map(item => {
           return (
             <li key={item.id}>
-              <button type="button" onClick={history.goBack}>
+              <button type="button" onClick={history.goBack} className='bt'>
                 Back to the list
               </button>
               <p>

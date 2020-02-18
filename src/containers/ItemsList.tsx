@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { SingleItem } from "../types/interfaces";
@@ -39,7 +39,7 @@ function ItemsList({ itemsList, addItem }: any) {
         addItem(json);
       })
       .then(() => {
-        shouldLoadMore();
+        setTimeout (()=> {shouldLoadMore()}, 500);
       });
   };
   const shouldLoadMore = () => {
@@ -57,20 +57,19 @@ function ItemsList({ itemsList, addItem }: any) {
   };
 
   useEffect(() => {
-    // shouldLoadMore();
+
     window.addEventListener("scroll", () => {
 
       shouldLoadMore();
     });
     console.log(itemsList.items);
     if (itemsList.items.length === 0) {
-      console.log('run should load more')
       shouldLoadMore();
     }
 
     // clean up
     return () => window.removeEventListener("scroll", shouldLoadMore);
-  }, []);
+  });
   return (
     <div>
       <div ref={itemsListRef}>
@@ -91,9 +90,7 @@ function ItemsList({ itemsList, addItem }: any) {
           )}
         </ul>
       </div>
-      {<button onClick={loadMore}>Load more</button>}
 
-      {console.log(itemsList)}
     </div>
   );
 }
