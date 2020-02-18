@@ -30,7 +30,7 @@ export default function ItemDetails({ history, match }: any) {
         setState([json]);
       });
     return () => {};
-  } );
+  }, [] );
 
   return (
     <div>

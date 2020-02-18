@@ -69,7 +69,7 @@ function ItemsList({ itemsList, addItem }: any) {
 
     // clean up
     return () => window.removeEventListener("scroll", shouldLoadMore);
-  });
+  }, []);
   return (
     <div>
       <div ref={itemsListRef}>
