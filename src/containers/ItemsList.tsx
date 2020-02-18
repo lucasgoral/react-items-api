@@ -52,15 +52,13 @@ function ItemsList({ itemsList, addItem }: any) {
       });
   };
   const shouldLoadMore = () => {
-    console.log("shouldLoadMore");
-    console.log(window.screenY);
-    console.log("shouldLoadMore");
+
     if (itemsListRef.current) {
-      console.log(window.innerHeight);
+      console.log(window.pageYOffset);
       console.log(itemsListRef.current.clientHeight);
       if (
         itemsListRef.current.clientHeight <=
-        window.innerHeight + window.screenY
+        window.innerHeight + window.pageYOffset
       ) {
         loadMore();
       }
@@ -70,9 +68,14 @@ function ItemsList({ itemsList, addItem }: any) {
   useEffect(() => {
     // shouldLoadMore();
     window.addEventListener("scroll", () => {
-      console.log();
+
       shouldLoadMore();
     });
+    console.log(itemsList.items);
+    if (itemsList.items.length === 0) {
+      console.log('run should load more')
+      shouldLoadMore();
+    }
 
     // clean up
     return () => window.removeEventListener("scroll", shouldLoadMore);
