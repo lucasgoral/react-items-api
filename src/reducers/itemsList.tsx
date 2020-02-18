@@ -1,16 +1,7 @@
-import { ADD_ITEMS } from "../actions/Actions";
+import { ADD_ITEMS } from "../actions/actions";
+import { SingleItem } from "../types/interfaces";
 
-interface Item {
-  id: number;
-  title: string;
-  description: string;
-  img_url: string;
-  price: number;
-  status: string;
-  created_at: string;
-  discount: number;
-  rating: number;
-}
+
 
 console.log("test");
 const itemsList = {
@@ -20,7 +11,7 @@ const itemsList = {
 
 const reducer = (
   state = itemsList,
-  action: { type: string; items: Item[] }
+  action: { type: string; items: SingleItem[] }
 ) => {
   switch (action.type) {
     case ADD_ITEMS:

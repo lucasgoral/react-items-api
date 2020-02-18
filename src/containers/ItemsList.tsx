@@ -1,25 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { ADD_ITEMS } from "../actions/Actions";
 import { Link } from "react-router-dom";
+import { SingleItem } from "../types/interfaces";
+import { ADD_ITEMS } from "../actions/actions";
 
-interface Item {
-  id: number;
-  title: string;
-  description: string;
-  img_url: string;
-  price: number;
-  status: string;
-  created_at: string;
-  discount: number;
-  rating: number;
-}
+
 
 const mapDispatchToProps = (
-  dispatch: (arg0: { type: string; items: Item[] }) => any
+  dispatch: (arg0: { type: string; items: SingleItem[] }) => any
 ) => {
   return {
-    addItem: (items: Item[]) =>
+    addItem: (items: SingleItem[]) =>
       dispatch({
         type: ADD_ITEMS,
         items
