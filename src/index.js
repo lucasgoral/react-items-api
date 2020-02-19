@@ -5,12 +5,13 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import ReactDOM from "react-dom";
 import "./sass/index.scss";
-import * as serviceWorker from "./serviceWorker";
-import rootReducer from "./reducers";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import thunk from "redux-thunk";
+import * as serviceWorker from "./serviceWorker";
 import ItemsList from "./containers/ItemsList";
 import ItemDetails from "./containers/ItemDetails";
-import thunk from "redux-thunk";
+import rootReducer from './reducers/index'
+
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
