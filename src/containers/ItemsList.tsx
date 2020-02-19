@@ -2,26 +2,35 @@ import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SingleItem } from '../types/interfaces';
-import { ADD_ITEMS } from '../actions/actions';
+import { ADD_ITEMS, SET_SCROLL } from '../actions/actions';
 
-const mapDispatchToProps = (dispatch: (arg0: { type: string; items: SingleItem[] }) => any) => {
+const mapDispatchToProps = (dispatch: (arg0: { type: string; items?: SingleItem[]; y?: number; }) => any) => {
 	return {
 		addItem: (items: SingleItem[]) =>
 			dispatch({
 				type: ADD_ITEMS,
 				items
-			})
+			}),
+		setScroll: (yPos: number) =>
+			dispatch({
+				type: SET_SCROLL,
+				y: yPos
+			}),
+
+
 	};
 };
 
-const mapStateToProps = (state: { itemsList: any }) => {
-	const { itemsList } = state;
-	return { itemsList };
+const mapStateToProps = (state: { itemsList: any, scrollPos: number }) => {
+	const { itemsList, scrollPos } = state;
+	console.log(state);
+	return { itemsList, scrollPos };
 };
 
-function ItemsList({ itemsList, addItem }: any) {
+function ItemsList({ itemsList, addItem, setScroll, scrollPos }: any) {
+	console.log('items list')
 	const itemsListRef = useRef<HTMLDivElement>(null);
-	const [ errorState, setErrorState ] = useState(false);
+	const [errorState, setErrorState] = useState(false);
 
 	const loadMore = () => {
 		fetch(`http://127.0.0.1:4010/offers?limit=10&offset=${itemsList.offset}`, {
@@ -55,16 +64,30 @@ function ItemsList({ itemsList, addItem }: any) {
 		}
 	};
 
+	const saveScroll = () => {
+		setScroll(window.pageYOffset);
+	}
+
+
 	useEffect(() => {
-		window.addEventListener('scroll', () => {
-			shouldLoadMore();
-		});
+		console.log('use effect')
+		window.scrollTo(0, scrollPos);
+		window.addEventListener('scroll',
+			shouldLoadMore
+		);
+		window.addEventListener('scroll',
+			saveScroll
+		);
 		if (itemsList.items.length === 0) {
 			shouldLoadMore();
 		}
 
 		// clean up
-		return () => window.removeEventListener('scroll', shouldLoadMore);
+		return () => {
+			window.removeEventListener('scroll', shouldLoadMore);
+			window.removeEventListener('scroll', saveScroll)
+		}
+
 	}, []);
 	return (
 		<div>
