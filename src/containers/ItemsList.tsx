@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { SingleItem } from '../types/interfaces';
@@ -23,16 +23,16 @@ const mapDispatchToProps = (dispatch: (arg0: { type: string; items?: SingleItem[
 
 const mapStateToProps = (state: { itemsList: any, scrollPos: number }) => {
 	const { itemsList, scrollPos } = state;
-	console.log(state);
+
 	return { itemsList, scrollPos };
 };
 
 function ItemsList({ itemsList, addItem, setScroll, scrollPos }: any) {
-	console.log('items list')
+
 	const itemsListRef = useRef<HTMLDivElement>(null);
 	const [errorState, setErrorState] = useState(false);
 
-	const loadMore = () => {
+	const loadMore = useCallback(() => {
 		fetch(`http://127.0.0.1:4010/offers?limit=10&offset=${itemsList.offset}`, {
 			headers: new Headers({
 				Authorization: 'Bearer loremipsum'
@@ -55,22 +55,22 @@ function ItemsList({ itemsList, addItem, setScroll, scrollPos }: any) {
 				console.log(e);
 				setErrorState(true);
 			});
-	};
-	const shouldLoadMore = () => {
+	}, []);
+	const shouldLoadMore = useCallback(() => {
 		if (itemsListRef.current) {
 			if (itemsListRef.current.clientHeight <= window.innerHeight + window.pageYOffset) {
 				loadMore();
 			}
 		}
-	};
+	}, []);
 
-	const saveScroll = () => {
+	const saveScroll = useCallback(() => {
+		
 		setScroll(window.pageYOffset);
-	}
+	}, [])
 
 
 	useEffect(() => {
-		console.log('use effect')
 		window.scrollTo(0, scrollPos);
 		window.addEventListener('scroll',
 			shouldLoadMore
@@ -89,6 +89,8 @@ function ItemsList({ itemsList, addItem, setScroll, scrollPos }: any) {
 		}
 
 	}, []);
+	
+
 	return (
 		<div>
 			<div ref={itemsListRef}>
