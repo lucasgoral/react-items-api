@@ -26,10 +26,9 @@ export default function ItemDetails({ history, match }: any) {
 
 	return (
 		<div>
-			<ul>
 				{state.map((item) => {
 					return (
-						<li key={item.id}>
+						<div key={item.id}>
 							<button type="button" onClick={history.goBack} className="bt">
 								Back to the list
 							</button>
@@ -49,10 +48,9 @@ export default function ItemDetails({ history, match }: any) {
 							<p>
 								<b>Price:</b> {item.price}
 							</p>
-						</li>
+						</div>
 					);
 				})}
-			</ul>
 			{errorState ? <p>Cannot load data.</p> : null}
 		</div>
 	);
