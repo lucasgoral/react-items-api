@@ -1,4 +1,4 @@
-# React Crud
+# React Items List Api
 
 ## Steps to run the project:
 1. npm install -g @stoplight/prism-cli
